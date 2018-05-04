@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!--styling, sizing and boarder for form -->
+<style>
+      #edit{
+        vertical-align: middle;
+        margin: 0 auto; 
+        width:500px;
+        height: 650px;
+        border-style: none;
+        text-align: center;
+        background: #F5F5F5;
+      }
+      form{
+        display: inline-block;
+        text-align: center;
+        vertical-align: center;
+      }
+      img{
+        width:150px; 
+        height: auto;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+</style>
+<!--logo -->
+<img src="http://ec2-13-58-187-52.us-east-2.compute.amazonaws.com/~edward.bottom/logo.png" alt="Logo">
+<br>
+<!--edit form -->
+<div id="edit">
+	<form action = "/updateReview" method = "POST" name = "updateReview">
+        <label for="content"><strong><h3>Review:</h3></strong></label><br>
+        <textarea id="content" name="content" cols="50" rows="7">{{review}}</textarea><br>
+        <label for="rating">Rating (0-5):</label><br>
+        <input type="number" name="rating" min="1" max="5" step=".01" value="{{rating}}"><br>
+        <input type="hidden" name="whiskey_id" value="{{whiskey_id}}"><br>
+        <input type="submit" value="Update Review">
+      </form>
+     <br>
+     <!--cancel edit form -->
+    <form action ="/reviews" method="POST" name="cancelEdit">
+    	<input type="submit" value="Cancel Edit">
+    </form>
+</div>
+{% endblock %}

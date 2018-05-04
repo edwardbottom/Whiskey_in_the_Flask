@@ -1,0 +1,76 @@
+<!--https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms-->
+<html>
+<head>
+    <!--setup and bootstrap -->
+  <title>Whiskey in the Flask</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+</head>
+<body>
+    <!--sizing and boarder-->
+    <style>
+        img{
+            width:100px; /* you can use % */
+        }
+        .go_to_whiskeys{
+         display: inline-block;
+        }
+        .go_to_my_whiskeys{
+         display: inline-block;
+        }
+        .submit_button{
+         display: inline-block;
+        }
+        .data_button{
+         display: inline-block;
+        }
+        .users_button
+        {
+          display:inline-block;
+        }
+        .logout_button{
+         display: inline-block;
+         float: right;
+        }
+    </style>
+  <div>
+    <!--header -->
+    <div class="container-fluid">
+    <h1>Whiskey in the Flask</h1>
+    <br>
+    <!--<img src="http://ec2-13-58-187-52.us-east-2.compute.amazonaws.com/~edward.bottom/logo.png" alt="Logo"> -->
+    {% if dont_show_header != True %}
+        <form class= "go_to_whiskeys" action ="/whiskeys" method = "POST" name = "go_to_whiskeys"> 
+            <button type="submit">View Our Collection</button>
+        </form> 
+        <form class= "go_to_my_whiskeys" action ="/loadMyWhiskeys" method="POST" name="go_to_my_whiskeys">
+            <button type="submit">View My Whiskeys </button>
+        </form>
+        <form class="submit_button" action ="/whiskeyForm" method = "POST" name = "register_button" >
+            <button type="submit">Add to our Collection</button>
+        </form> 
+        <form class="data_button" action="/data" method="POST" name="data_button">
+            <button type="submit">Analysis</button>
+        </form>
+        <form class="data_button" action="/home" method="POST" name="return_to_home">
+            <button type="submit">Return to Home</button>
+        </form>
+        {% if admin %}
+        <form class="users_button" action="/users" method = "POST" name = "users">
+          <button type="submit">Users</button>
+        </form>
+        {% endif %}
+        <form class= "logout_button" action ="/logout" method = "POST" name = "logout_button" > 
+            <button type="submit">Logout</button>
+        </form>
+    {% endif %}
+  <hr>
+ <!--extend from base -->
+  {% block content %}{% endblock %}
+  </div>
+    </div>
+    <!--bootsreap -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+</body>
+</html>

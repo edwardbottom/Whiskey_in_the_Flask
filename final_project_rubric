@@ -1,0 +1,32 @@
+#Login 
+*Users can register with a username and password (5 points)
+*Registered users can login (5 points)
+*Passwords are stored securely (4 points)
+*Users use flask for the flask login feature (3 points)
+
+#Database 
+*A database of whiskeys is present (8 points)
+*MongoDB is used to store data (5 points)
+*Reviews asccociated with a whiskey are stored in the database (5 points)
+*A user can edit reviews they posted (5 points)
+
+#Reviews 
+*Each whiskey has a page with a list of all its reviews (5 points)
+*Users can view other users' reviews (5 points)
+*Users can like reviews (5 points)
+
+#Catalog
+*Users can view a table of all the whiskeys in the database (10 points)
+*Users can add whiskeys to the catalog (5 points)
+
+
+#Style 
+*Site is visually appealing and easy to navigate (5 points)
+
+#Creative Portion 
+(20 points)
+
+#rubric
+A ruric was turned in on time (5 points)
+
+Approved By: Connor Stevens

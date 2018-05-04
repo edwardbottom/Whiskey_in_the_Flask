@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!--boarder and sizing for form -->
+<style>
+      #form {
+        vertical-align: middle;
+        margin: 0 auto; 
+        width:275px;
+        height: 650px;
+        border-style: none;
+        text-align: center;
+        background: #F5F5F5;
+      }
+      form{
+        display: inline-block;
+        text-align: center;
+        vertical-align: center;
+      }
+      img{
+        width:150px; /* you can use % */
+        height: auto;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+</style>
+<br>
+<!--logo -->
+<img src="http://ec2-13-58-187-52.us-east-2.compute.amazonaws.com/~edward.bottom/logo.png" alt="Logo">
+<br>
+<!--form to add a shiskey to the database -->
+<div id="form">
+  <form action = "/addWhiskey" method = "POST" name = "login">
+    <h3>Add Whiskey</h3><br>
+    <label for="name" required>Name: </label>
+    <input type="text" id="name" name="name" required><br><br>
+    <label for="rating" required>Rating: </label>
+    <input type="number" id="rating" name="rating" minimum=0 maximum=115 step=1 required><br><br>
+    <label for="country">Country: </label>
+    <input type="text" id="country" name="country" required><br><br>
+    <label for="name">Category: </label>
+    <input type="text" id="category" name="category" required><br><br>
+    <label for="price">Price: </label>
+    <input type="number" id="price" name="price" minimum=0 step="any" required><br><br>
+    <label for="abv">ABV: </label>
+    <input type="number" id="abv" name="abv" minimum=0 step=1 required><br><br>
+    <label for="age">Age: </label>
+    <input type="number" id="age" name="age" minimum=0 step=1 required><br><br>
+    <label for="brand" required>Brand: </label>
+    <input type="text" id="brand" name="brand" required><br><br>
+    <button type="submit">Add to our Collection</button>
+  </form>
+</div>
+{% endblock %}

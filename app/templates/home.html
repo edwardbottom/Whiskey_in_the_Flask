@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!--set size of text -->
+    <style>
+        img{
+            width: 300;
+        }
+    </style>
+    <!--intro what is whiskey column -->
+    <div class="row">
+        <div class="col-4">
+        <div id="definition">
+                <h3> What is whiskey? </h3>
+                    <p>Whiskey is a type of distilled alcoholic beverage made from fermented grain mash. Various grains (which may be malted) are used for different varieties, including barley, corn (maize), rye, and wheat. Whiskey is typically aged in wooden casks, generally made of charred white oak. Whiskey is a strictly regulated spirit worldwide with many classes and types. The typical unifying characteristics of the different classes and types are the fermentation of grains, distillation, and aging in wooden barrels.</p>
+                    <p>The first question a new whiskey drinker asks is which type of whiskey to try first. The best answer to this is to start with the whiskey with the best selection where you live. If you’re American you’re going to want to get into bourbon, if you’re Canadian you’ll want to look into scotch.The reason for this is economic: the more selection you have of a specific type of whiskey, the more likely you are to find quality bottles at lower prices.Regardless of which style of whiskey you’re trying first try to talk to someone who knows a thing or two about the selection at hand. You will want to start with a good beginner whiskey, something light and easy on the palate. If your first foray into whiskey is with an Islay scotch, you may derail yourself before you ever get started.</p>
+                      <div id="img1"> 
+                        <img src="http://ec2-13-58-187-52.us-east-2.compute.amazonaws.com/~edward.bottom/cover.jpg" alt="Logo">
+                    </div> 
+            </div>
+        </div>
+        <!--column advertising the number of whiskeys -->
+    <div class="col-4">
+    <div class="collection">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h3> Our collection has <strong>over 250 whiskeys</strong> </h3>
+        <br>
+    </div>
+</div>
+<!--whisky of the day statistics -->
+ <div class="col-4">
+    <div id="day">
+        <h2> <strong> Today's Whiskey of the Day </strong> </h2>
+        <h3>Name: {{whiskey_of_the_day.Name}} </h3>
+        {% if whiskey_of_the_day.Rating != 0 %}
+            <h4>Rating: {{whiskey_of_the_day.Rating}}</h4>
+        {% endif %}
+        <h4>Country: {{whiskey_of_the_day.Country}}</h4>
+        <h4>Category: {{whiskey_of_the_day.Category}}</h4>
+        <h4>Price: {{whiskey_of_the_day.Price}}</h4>
+        <h4>ABV: {{whiskey_of_the_day.ABV}}</h4>
+        {% if whiskey_of_the_day.Age != 0 %}
+            <h4>Age: {{whiskey_of_the_day.Age}}</h4>
+        {% endif %}
+        <!--image of whiskey glass -->
+         <div id="img2"> 
+            <img src="http://ec2-13-58-187-52.us-east-2.compute.amazonaws.com/~edward.bottom/photo.jpg" alt="Logo">
+        </div> 
+        <!--link to review for whiskey of the day -->
+        <a href="/goToReviews?id={{whiskey_of_the_day.ID}}">User Reviews for {{whiskey_of_the_day.Name}}</a>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+ 

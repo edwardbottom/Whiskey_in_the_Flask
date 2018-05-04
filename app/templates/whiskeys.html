@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if collection %}
+
+<!--https://stackoverflow.com/questions/15643037/how-do-i-change-the-hover-over-color-for-a-hover-over-table-in-bootstrap -->
+<!--bootstrap and table style -->
+<style>
+	.table tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #ecd1bd;
+}
+
+  .myCollectionLink
+  {
+    cursor:pointer;
+    color:#007bff;
+  }
+
+  .myCollectionLink:hover
+  {
+     text-decoration:underline;
+     color:#0357b3;
+  }
+
+  .removeFromCollectionLink
+  {
+    cursor:pointer;
+    color:#007bff;
+  }
+
+  .removeFromCollectionLink:hover
+  {
+     text-decoration:underline;
+     color:#0357b3;
+  }
+
+</style>
+
+<!--creating a table for the whiskeys -->
+<div class="table-responsive">
+  <table id="myTable2" class="table table-striped table-bordered table-hover">
+  	<thead class="thead-dark">
+  	<tr>
+      <!--setts the header -->
+		<th scope="col" onclick="sortTable(0)">Name</th>
+  		<th scope="col" onclick="sortTable(1)">Rating</th>
+  		<th scope="col" onclick="sortTable(2)">Country</th>
+  		<th scope="col" onclick="sortTable(3)">Category</th>
+  		<th scope="col" onclick="sortTable(4)">Price</th>
+  		<th scope="col" onclick="sortTable(5)">ABV</th>
+  		<th scope="col">Age</th>
+  		<th scope="col" onclick="sortTable(6)">Brand</th>
+  		<th scope="col">Link to User Reviews</th>
+      <th scope="col"> My Whiskeys</th>
+      {% if admin %}
+      <th scope="col">Remove from collection</th>
+      {% endif %}
+  	</tr>
+  </thead>
+  <!--for all the whiskeys in the database-->
+  {% for whiskey in collection %}
+  	<tr class="active tableRow" data="{{whiskey.ID}}"> 
+  		<td>{{whiskey.Name}}</td>
+  		{% if whiskey.Rating != 0 %}
+  			<td>{{whiskey.Rating}}</td>
+  		{% else %}
+  			<td>-</td>
+  		{% endif %}
+  		<td>{{whiskey.Country}}</td>
+  		<td>{{whiskey.Category}}</td>
+  		<td>{{whiskey.Price}}</td>
+  		<td>{{whiskey.ABV}}</td>
+  		{% if whiskey.Age != 0 %}
+  			<td>{{whiskey.Age}}</td>
+  		{% else %}
+  			<td>-</td>
+  		{% endif %} 
+  		<td>{{whiskey.Brand}}</td>
+  		<td><a href="/goToReviews?id={{whiskey.ID}}">User Reviews for {{whiskey.Name}}</a></td>
+       {% if whiskey.ID in my_whiskey_IDs %}
+        <td><p class="myCollectionLink" data="{{whiskey.ID}}"> Remove from my collection </p></td>
+      {% else %}
+        <td><p class="myCollectionLink" data="{{whiskey.ID}}"> Add to my collection </p></td>
+      {% endif %}
+      {% if admin %}
+      <td><p class="removeFromCollectionLink" data="{{whiskey.ID}}"> Remove from collection </p></td>
+      {% endif %}
+  	</tr>
+  {% endfor %}
+  </table>
+  <!--ajax to reload the table when whiskeys are added -->
+  <script>
+    //adds and updates content for whiskeys in the collection 
+  let myCollectionLinks = document.getElementsByClassName("myCollectionLink");
+  for(let i = 0; i < myCollectionLinks.length; i++)
+  {
+    myCollectionLinks[i].addEventListener("click",function()
+    {
+      let xmlHttp = new XMLHttpRequest();
+      let datastring = "id="+encodeURIComponent(myCollectionLinks[i].getAttribute("data"));
+      xmlHttp.open("POST","/addToMyCollection",true);
+      xmlHttp.addEventListener("load",function(event)
+      {
+        if(myCollectionLinks[i].innerText.includes("Remove"))
+        {
+          myCollectionLinks[i].innerText = " Add to my collection ";
+        }
+        else
+        {
+          myCollectionLinks[i].innerText = " Remove from my collection ";        
+        }
+      });
+      xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+      xmlHttp.send(datastring);
+    });
+  }
+
+  let removeFromCollectionLinks = document.getElementsByClassName("removeFromCollectionLink");
+  for(let i = 0; i < removeFromCollectionLinks.length; i++)
+  {
+    let removeLinkData = removeFromCollectionLinks[i].getAttribute("data");
+    removeFromCollectionLinks[i].addEventListener("click",function()
+    {
+      let xmlHttp = new XMLHttpRequest();
+      let datastring = "id="+encodeURIComponent(removeLinkData);
+      xmlHttp.open("POST","/removeFromCollection",true);
+      xmlHttp.addEventListener("load",function(event)
+      {
+       let rows = document.getElementsByClassName("tableRow");
+       for(let j = 0; j < rows.length; j++)
+       {
+        let row = rows[j];
+        if(row.getAttribute("data")==removeLinkData)
+        {
+          row.parentNode.removeChild(row);
+        }
+       } 
+      });
+      xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+      xmlHttp.send(datastring);
+    });
+  }
+
+//https://www.w3schools.com/howto/howto_js_sort_table.asp
+//sorts the table using ajax
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("myTable2");
+  switching = true;
+  // Set the sorting direction to ascending:
+  dir = "asc"; 
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      /* Check if the two rows should switch place,
+      based on the direction, asc or desc: */
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      // Each time a switch is done, increase this count by 1:
+      switchcount ++; 
+    } else {
+      /* If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again. */
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+</div>
+  {% else %}
+  <p> Sorry our selection is currently under maintence </p>
+{% endif %} 
+
+{% endblock %}

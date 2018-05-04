@@ -1,0 +1,27 @@
+table{
+	text-align: center;
+    width:70%; 
+    margin-left:15%; 
+    margin-right:15%;
+    border: 1px;
+    width: 1000px;
+    height: 600px;
+  }
+/*https://stackoverflow.com/questions/6389085/how-to-top-left-justify-text-in-a-td-cell-that-spans-multiple-rows*/
+th{
+	text-align:left;
+	vertical-align:top;
+	padding:0;
+	border: 1px;
+}
+
+tr{
+	border: 1px;
+}
+
+td{
+	text-align: left;
+	vertical-align: top;
+}
+
+table, td, th { border: 1px}

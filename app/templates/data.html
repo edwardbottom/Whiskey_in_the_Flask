@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!--for all data in database -->
+  {% for whiskey in whiskeys %}
+  	{% if whiskey.Rating >= 40 and whiskey.Price <= 200 %}
+  		<data value="{{whiskey.Name}}" class = "whiskeyname"></data>
+  		<data value="{{whiskey.Rating}}" class = "whiskeyrating"></data>
+  		<data value="{{whiskey.Price}}" class= "whiskeyprice"></data>
+  	{% endif %}
+  {% endfor %}
+
+	<style>
+		/*taken from http://alignedleft.com/tutorials/d3/axes*/
+		.axis path,
+		.axis line 
+		{
+		    fill: none;
+		    stroke: black;
+		    shape-rendering: crispEdges;
+		}		
+
+		.axis text 
+		{
+		    font-family: sans-serif;
+		    font-size: 11px;
+		}
+
+		.graph-title
+		{
+			font-size:20px;
+			font-weight:bold;
+		}
+		/*end citation*/
+
+		/*taken from http://bl.ocks.org/d3noob/a22c42db65eb00d4e369*/
+		div.tooltip 
+		{	
+		    position: absolute;			
+		    text-align: center;			
+		    width: 80px;					
+		    height: 110px;					
+		    padding: 2px;				
+		    font: 12px sans-serif;		
+		    background: lightsteelblue;	
+		    border: 0px;		
+		    border-radius: 16px;			
+		    pointer-events: none;			
+		}
+		/*end citation*/
+
+	</style>
+	<!--<div id="x-price-y-rating"></div>-->
+	<script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+  	<script type="text/javascript">
+	  	
+	  	let nameData = document.getElementsByClassName("whiskeyname");
+	  	let ratingData = document.getElementsByClassName("whiskeyrating");
+	  	let priceData = document.getElementsByClassName("whiskeyprice");
+
+	  	let dataset = [];
+
+	  	for(let i = 0; i < nameData.length; i++)
+	  	{ 
+	  		let name = nameData[i].getAttribute("value");
+	  		let rating = parseInt(ratingData[i].getAttribute("value"));
+	  		let price = parseInt(priceData[i].getAttribute("value"));		
+
+	  		dataset.push({'name':name,'price':price,'rating':rating})
+	  	}
+
+		let c = d3.scale.category20(); 	  	
+
+
+
+	  	//used this tutorial: http://alignedleft.com/tutorials/d3/making-a-scatterplot
+
+	  	//anything with the comment "tooltip" next to it used this code as reference: http://bl.ocks.org/d3noob/a22c42db65eb00d4e369
+
+
+	  	let width = 500;
+	  	let height = 500;
+	  	let padding = 50;
+	  	let xScl = d3.scale.linear().domain([0,200]).range([padding,width-padding]);
+	  	let yScl = d3.scale.linear().domain([40,100]).range([height-padding,padding]);
+
+	  	let good_rtg_threshold = 80
+
+	  	let div = d3.select("body").append("div").attr("class","tooltip").style("opacity",0);//tooltip
+
+	  	let svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+	  	svg.selectAll("circle")
+	  	.data(dataset)
+	  	.enter()
+	  	.append("circle")
+	  	.attr("cx",function(d)
+	  	{
+	  		return xScl(d.price);
+	  	})
+	  	.attr("cy",function(d)
+	  	{
+	  		return yScl(d.rating);
+	  	})
+	  	.attr("r",3)
+	  	.style("fill",function(d,i)
+	  	{
+	  		if(d.rating > good_rtg_threshold && d.price < 50)
+		  	{
+		  		return "blue";
+		  	}
+		  	else if(d.rating > 60 && d.price < 50)
+		  	{
+		  		return "lightblue";
+		  	}
+		  	else if(d.price < 50)
+		  	{
+		  		return "tan";
+		  	}
+		  	else if(d.rating > good_rtg_threshold && d.price < 100)
+		  	{
+		  		return "green";
+		  	}
+		  	else if(d.price < 100)
+		  	{
+		  		return "red";
+		  	}
+		  	else if(d.rating > good_rtg_threshold)
+		  	{
+		  		return "gold";
+		  	}
+		  	else
+		  	{
+		  		return "black";
+		  	}
+	  	})
+	  	.on("mouseover",function(d)//tooltip
+  		{
+	  		div.transition().duration(200).style("opacity",.9);
+			div.html(d.name + "<br>(" + d.rating + ", $" + d.price + ")").style("left",(d3.event.pageX) + "px").style("top",(d3.event.pageY-28)+"px");
+
+  		})
+  		.on("mouseout",function(d)//tooltip
+		{
+			div.transition().duration(500).style("opacity",0);	
+		});
+	  	
+	  	let xAxis = d3.svg.axis().scale(xScl);
+	  	svg.append("g")
+	  	.attr("class","axis")
+	  	.attr("transform","translate(0,"+(height-padding)+")")
+	  	.call(xAxis);
+
+	  	let yAxis = d3.svg.axis().scale(yScl).orient("left");
+	  	svg.append("g")
+	  	.attr("class","axis")
+	  	.attr("transform","translate("+padding+",0)")
+	  	.call(yAxis);
+
+
+	  
+	  	//https://stackoverflow.com/a/11194968
+	  	
+	  	svg.append("text") 
+	  	.attr("class","x-label")
+	  	.attr("x",200)
+	  	.attr("y",490)
+	  	.text("Price of Whiskey ($)");
+
+	  	svg.append("text")
+	  	.attr("class","y-label")
+	  	.attr("x",-165)
+	  	.attr("y",20)
+	  	.attr("text-anchor","end")
+	  	.attr("transform","rotate(-90)")
+	  	.text("Critics' Rating (0-100)");
+
+	  	svg.append("text") 
+	  	.attr("class","graph-title")
+	  	.attr("x",180)
+	  	.attr("y",20)
+	  	.text("Whiskey Rating vs. Price");
+
+
+		//end citation	
+
+
+	  	//end citation
+
+  </script>
+{% endblock %}

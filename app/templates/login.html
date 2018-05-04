@@ -1,0 +1,63 @@
+<!--https://medium.com/@dmitryrastorguev/basic-user-authentication-login-for-flask-using-mongoengine-and-wtforms-922e64ef87fe -->
+{% extends "base.html" %}
+
+{% block content %}
+<!--styling and boarder -->
+      <style>
+      #login {
+        vertical-align: middle;
+        margin: 0 auto; 
+        width:275px;
+        height: 275px;
+        border-style: none;
+        text-align: center;
+        background: #F5F5F5;
+      }
+      form{
+        display: inline-block;
+        text-align: center;
+        vertical-align: center;
+      }
+      img{
+        width:150px; /* you can use % */
+        height: auto;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      p{
+        text-align: center;
+      }
+    </style>
+      <br>
+      <!--logo and error message-->
+      <img src="http://ec2-13-58-187-52.us-east-2.compute.amazonaws.com/~edward.bottom/logo.png" alt="Logo">
+      <br>
+      {% if error %}
+        <p> {{error}} </p>
+      {% endif %}
+      <br>
+      <!--login form -->
+    <div id="login">
+      <form class ="login-form" action = "/loadLogin" method = "POST" name = "login">
+        
+          <h3><strong>Login</strong> </h3><br>
+          <div class="form-group">
+            <input type="text" name="username" placeholder = "username" ><br>
+          </div>
+          <div class="form-group">
+            <input type="password" name="password" placeholder="password" ><br>
+          </div>
+          <div class="form-group">
+            <input type="submit" value="Login" >
+          </div>
+      </form>
+      <!--registration button -->
+      <form class="register-button" action ="/register" method = "POST" name = "register_button" > 
+        <div class="form-group">
+          <button type="submit">Join the Community</button>
+        </div>
+      </form> 
+    </div>
+{% endblock %}
